@@ -5,5 +5,8 @@
   "main": "src/index.js",
   "repository": "https://github.com/messiasGeovani/Nodejs-JwtAuth.git",
   "author": "messiasGeovani",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
