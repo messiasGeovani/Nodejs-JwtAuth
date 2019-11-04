@@ -12,10 +12,8 @@ exports.User = new Schema({
 })
 
 // generate token function
-User.prototype.generateToken = function() {
-    return jwt.sign(
-        {
-            id: this.id
-        }
-    )
-}
+const generateToken = () => jwt.sign(
+    {
+        id: this.id
+    }
+)

@@ -17,6 +17,12 @@ class App {
     middlewares() {
         // json body support config
         this.express.use(express.json())
+        // database config
+        const database = require('./config/database').Db
+        database()
+
+        // cors activate
+        this.express.use(require('cors')())
     }
 
     routes() {

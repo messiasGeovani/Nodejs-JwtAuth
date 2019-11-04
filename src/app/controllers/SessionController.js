@@ -1,10 +1,10 @@
-const User = require('../models').User
+const User = require('../models/User').User
 
 /**
  * Session Controller
  */
 exports.SessionControllers = new class {
-    async store() {
+    async store(req, res) {
         const { email, password } = req.body
 
         // getting a data
