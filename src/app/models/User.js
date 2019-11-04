@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const bcrypt = require('bcrypt')
 
 // user model
-const User = new Schema({
+const User = Schema({
     email: {
         type: String,
         trim: true,
