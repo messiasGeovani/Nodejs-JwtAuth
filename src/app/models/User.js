@@ -8,13 +8,13 @@ const bcrypt = require('bcrypt')
 const User = Schema({
     email: {
         type: String,
-        trim: true,
-        required: true
+        // trim: true,
+        // required: true
     },
     password: {
         type: String,
-        trim: true,
-        required: true
+        // trim: true,
+        // required: true
     },
     tokens: [{
         token: {

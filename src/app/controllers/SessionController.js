@@ -23,7 +23,7 @@ exports.SessionControllers = new class {
         }
     }
 
-    async authenticate(req, res, next) {
+    async authenticate(req, res) {
         try {
             const { email, password } = req.body
             const user = await User.findByCredentials(email, password)
