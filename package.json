@@ -1,0 +1,9 @@
+{
+  "name": "messiasGeovani",
+  "version": "1.0.0",
+  "description": "a simple jwt authentication",
+  "main": "src/index.js",
+  "repository": "https://github.com/messiasGeovani/Nodejs-JwtAuth.git",
+  "author": "messiasGeovani",
+  "license": "MIT"
+}
