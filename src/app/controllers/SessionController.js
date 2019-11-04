@@ -1,32 +1,68 @@
 const User = require('../models/User').User
+// bcrypt import
+const bcrypt = require('bcrypt')
+// jwt import
+const jwt = require('jsonwebtoken')
 
 /**
  * Session Controller
  */
 exports.SessionControllers = new class {
-    async store(req, res) {
+    async store(req, res, next) {
         const { email, password } = req.body
 
-        // getting a data
-        const user = User.findOne({ where: { email } })
+        // creating an user
+        await User.create({
+            email,
+            password
+        }, function(err, result) {
 
-        // checking the user
-        if (!user) {
-            res.status(404).json({
-                message: 'User not found'
-            })
-        }
+            if (err) {
+                next(err)
+            } else {
+                res.status(200).json({
+                    message: 'Success'
+                })
+            }
 
-        // checking the password
-        if (!password) {
-            resstatus(404).json({
-                message: 'Invalid password'
-            })
-        }
+        })
+    }
 
-        return res.json({
-            user,
-            token: user.generateToken()
+    async authenticate(req, res, next) {
+        const { email, password } = req.body
+
+        // authenticating an user
+        await User.findOne({
+            email,
+            password
+        }, function(err, userInfo) {
+
+            if (err) {
+                next(err)
+            } else {
+
+                if (bcrypt.compareSync(req.body.password, userInfo.password)) {
+                    const token = jwt.sign(
+                        {
+                            id: userInfo._id
+                        },
+                        req.app.get('secretKey'),
+                        {
+                            expiresIn: '1h'
+                        }
+                    )
+
+                    res.status(200).json({
+                        user: userInfo,
+                        token: token
+                    })
+                } else {
+                    res.json({
+                        message: 'Invalid Password/email'
+                    })
+                }
+
+            }
         })
     }
 }
