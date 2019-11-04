@@ -1,19 +1,26 @@
-const Schema = require('mongoose').Schema
-const ObjectId = Schema.Types.ObjectId
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// jwt import
-const jwt = require('jsonwebtoken')
+// bcrypt import
+const bcrypt = require('bcrypt')
 
 // user model
-exports.User = new Schema({
-    _id: ObjectId,
-    email: String,
-    password: String
+const User = new Schema({
+    email: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    password: {
+        type: String,
+        trim: true,
+        required: true
+    }
 })
 
-// generate token function
-const generateToken = () => jwt.sign(
-    {
-        id: this.id
-    }
-)
+// hashing password
+User.pre('save', function(next) {
+    this.password = bcrypt.haschSync(this.password, 8)
+})
+
+exports.User = mongoose.model('User', User)
