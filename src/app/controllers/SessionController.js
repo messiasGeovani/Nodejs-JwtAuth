@@ -41,7 +41,7 @@ exports.SessionControllers = new class {
                 next(err)
             } else {
 
-                if (bcrypt.compareSync(req.body.password, userInfo.password)) {
+                if (bcrypt.compareSync(password, userInfo.password)) {
                     const token = jwt.sign(
                         {
                             id: userInfo._id

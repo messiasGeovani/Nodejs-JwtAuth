@@ -20,7 +20,7 @@ const User = new Schema({
 
 // hashing password
 User.pre('save', function(next) {
-    this.password = bcrypt.haschSync(this.password, 8)
+    this.password = bcrypt.hashSync(this.password, 8)
 })
 
 exports.User = mongoose.model('User', User)
