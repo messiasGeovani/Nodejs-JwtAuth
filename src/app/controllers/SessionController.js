@@ -8,61 +8,38 @@ const jwt = require('jsonwebtoken')
  * Session Controller
  */
 exports.SessionControllers = new class {
-    async store(req, res, next) {
-        const { email, password } = req.body
+    async store(req, res) {
+        try {
+            const user = new User(req.body)
+            await user.save()
+            const token = await user.generateToken()
 
-        // creating an user
-        await User.create({
-            email,
-            password
-        }, function(err, result) {
-
-            if (err) {
-                next(err)
-            } else {
-                res.status(200).json({
-                    message: 'Success'
-                })
-            }
-
-        })
+            res.status(201).json({
+                user,
+                token
+            })
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 
     async authenticate(req, res, next) {
-        const { email, password } = req.body
-
-        // authenticating an user
-        await User.findOne({
-            email,
-            password
-        }, function(err, userInfo) {
-
-            if (err) {
-                next(err)
-            } else {
-
-                if (bcrypt.compareSync(password, userInfo.password)) {
-                    const token = jwt.sign(
-                        {
-                            id: userInfo._id
-                        },
-                        req.app.get('secretKey'),
-                        {
-                            expiresIn: '1h'
-                        }
-                    )
-
-                    res.status(200).json({
-                        user: userInfo,
-                        token: token
-                    })
-                } else {
-                    res.json({
-                        message: 'Invalid Password/email'
-                    })
-                }
-
+        try {
+            const { email, password } = req.body
+            const user = await User.findByCredentials(email, password)
+            if (!user) {
+                return res.status(401).json({
+                    error: 'Login Failed! Check Authentication credentials'
+                })
             }
-        })
+
+            const token = await user.generateToken()
+            res.status(200).json({
+                user,
+                token
+            })
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 }
