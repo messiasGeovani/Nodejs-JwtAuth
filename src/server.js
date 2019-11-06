@@ -1,3 +1,6 @@
+// dotenv config
+require('dotenv').config()
+
 const app = require('./').App
 
 const mongoose = require('mongoose')
@@ -8,7 +11,8 @@ mongoose.connect(
         useNewUrlParser: true,
         useUnifiedTopology: true
     }
-)
+).then(() => console.log('Database connect'))
+.catch(err => console.log(err))
 
 // starting the server
 app.listen(3000)

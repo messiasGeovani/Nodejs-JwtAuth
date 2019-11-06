@@ -1,33 +1,15 @@
-const express = require('express')
+const express = require('express');
+const app = express();
+// cors
+const cors = require('cors')
 
-class App {
-    constructor() {
-        /**
-         * starting the express app
-         */
-        this.express = express()
+// routes
+const routes = require('./routes').Routes
 
-        /**
-         * starting the methids
-         */
-        this.middlewares()
-        this.routes()
-    }
+app.use(express.json())
+// cors activate
+app.use(cors())
+// routes activate
+app.use(routes)
 
-    middlewares() {
-        // json body support config
-        this.express.use(express.json())
-
-        // cors activate
-        this.express.use(require('cors')())
-    }
-
-    routes() {
-        // routes config
-        const routes = require('./routes').Routes
-        this.express.use(routes)
-    }
-}
-
-// exporting the app object
-exports.App = new App().express
+exports.App = app
