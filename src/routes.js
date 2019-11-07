@@ -7,6 +7,6 @@ const SessionController = require('./app/controllers/SessionController').Session
  * Creating the routes
  */
 routes.post('/user', SessionController.store)
-routes.post('/login', SessionController.authenticate)
+routes.post('/login', SessionController.login)
 
 exports.Routes = routes

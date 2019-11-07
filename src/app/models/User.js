@@ -30,7 +30,7 @@ const User = new Schema({
     })
 
 // hashing password
-User.pre('save', async function (next) {
+User.pre('save', async function(next) {
     // hashing the password
     const user = this
     if (user.isModified('password')) {
@@ -40,29 +40,13 @@ User.pre('save', async function (next) {
 })
 
 // generate token method
-User.methods.generateToken = async function () {
+User.methods.generateToken = async function() {
     // generating the token
     const user = this
     const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY)
     user.tokens = user.tokens.concat({ token })
     await user.save()
     return token
-}
-
-// find by token method
-User.statics.findByCredentials = async (email, password) => {
-    // searching data
-    await User.findOne({ email, password }).exec()
-        .then(result => {
-            if (!user) {
-                throw new Error({ Error: 'Invalid login credentials' })
-            }
-
-            return result
-        })
-        .catch(err => {
-            throw err
-        })
 }
 
 exports.User = mongoose.model('User', User)

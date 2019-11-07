@@ -1,8 +1,5 @@
 const User = require('../models/User').User
-// bcrypt import
-const bcrypt = require('bcrypt')
-// jwt import
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 /**
  * Session Controller
@@ -25,24 +22,19 @@ exports.SessionControllers = new class {
             })
     }
 
-    async authenticate(req, res) {
+    async login(req, res) {
         const { email, password } = req.body
-        const user = await User.findByCredentials(email, password)
-            .then(async () => {
-                if (!user) {
-                    return res.status(401).json({
-                        error: 'Login Failed! Check Authentication credentials'
-                    })
+        
+        await User.findOne({ email: email })
+            .then(async result => {
+
+                const isPasswordMatch = await bcrypt.compare(password, result.password)
+                if (!isPasswordMatch) {
+                    throw new Error({ error: 'Invalid login credentials' })
                 }
 
-                const token = await user.generateToken()
-                res.status(200).json({
-                    user,
-                    token
-                })
-            })
-            .catch(err => {
-                throw err
+                const token = await result.generateToken()
+                res.json({ token })
             })
     }
 }
