@@ -15,5 +15,5 @@ mongoose.connect(
 .catch(err => console.log(err))
 
 // starting the server
-app.listen(3000)
-console.log('Server is running at 3000')
+app.listen(3333)
+console.log('Server is running at 3333')
